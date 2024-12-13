@@ -1,0 +1,13 @@
+{
+  "name": "binarysearchtree",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Implementing Binary Search Tree Data Structure using JavaScript",
+  "main": "helper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
