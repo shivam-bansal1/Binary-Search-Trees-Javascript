@@ -99,6 +99,63 @@ class Tree {
     while (node.left !== null) node = node.left;
     return node;
   }
+
+  find(value) {
+    if (!this.root) return null;
+    let node = this.root;
+
+    while (node) {
+      if (value == node.data) return node;
+      else if (value < node.data) node = node.left;
+      else node = node.right;
+    }
+
+    console.log(`${value} does not exists.`);
+    return null;
+  }
+
+  levelOrderIterative(callback) {
+    if (!this.root) {
+      console.log("Tree is empty!");
+      return;
+    }
+
+    if (typeof callback !== "function") {
+      throw new Error("Callback is not a function!");
+    }
+    const queue = [];
+    queue.push(this.root);
+
+    while (queue.length > 0) {
+      let currentNode = queue.shift();
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+      callback(currentNode.data);
+    }
+  }
+
+  levelOrderRecursive(callback, queue = [this.root]) {
+    if (!this.root) {
+      console.log("Tree is empty!");
+      return;
+    }
+
+    if (typeof callback !== "function") {
+      throw new Error("Callback is not a function!");
+    }
+    // Base Case
+    if (queue.length === 0) {
+      return;
+    }
+
+    let currentNode = queue.shift();
+    callback(currentNode.data);
+
+    if (currentNode.left) queue.push(currentNode.left);
+    if (currentNode.right) queue.push(currentNode.right);
+
+    this.levelOrderRecursive(callback, queue);
+  }
 }
 
 let newTree = new Tree([]);
@@ -113,5 +170,8 @@ newTree.insert(50);
 newTree.insert(100);
 newTree.insert(2);
 prettyPrint(newTree.root);
-newTree.deleteItem(100);
-prettyPrint(newTree.root);
+
+function callback(value) {
+  process.stdout.write(`${value} -> `);
+}
+newTree.levelOrderRecursive(callback);
