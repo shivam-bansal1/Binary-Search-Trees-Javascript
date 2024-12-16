@@ -156,6 +156,53 @@ class Tree {
 
     this.levelOrderRecursive(callback, queue);
   }
+
+  inOrder(callback, node = this.root) {
+    if (!this.root) {
+      console.log("Tree is empty!");
+      return;
+    }
+    if (typeof callback !== "function") {
+      throw new Error("Callback is not a function!!");
+    }
+
+    if (!node) return;
+
+    if (node.left) this.inOrder(callback, node.left);
+    callback(node.data);
+    if (node.right) this.inOrder(callback, node.right);
+  }
+
+  preOrder(callback, node = this.root) {
+    if (!this.root) {
+      console.log("Tree is empty!");
+      return;
+    }
+    if (typeof callback !== "function") {
+      throw new Error("Callback is not a function!!");
+    }
+
+    if (!node) return;
+
+    callback(node.data);
+    if (node.left) this.preOrder(callback, node.left);
+    if (node.right) this.preOrder(callback, node.right);
+  }
+
+  postOrder(callback, node = this.root) {
+    if (!this.root) {
+      console.log("Tree is empty!");
+      return;
+    }
+    if (typeof callback !== "function") {
+      throw new Error("Callback is not a function!!");
+    }
+    if (!node) return;
+
+    if (node.left) this.postOrder(callback, node.left);
+    if (node.right) this.postOrder(callback, node.right);
+    callback(node.data);
+  }
 }
 
 let newTree = new Tree([]);
@@ -174,4 +221,5 @@ prettyPrint(newTree.root);
 function callback(value) {
   process.stdout.write(`${value} -> `);
 }
-newTree.levelOrderRecursive(callback);
+// newTree.levelOrderRecursive(callback);
+newTree.inOrder(callback);
