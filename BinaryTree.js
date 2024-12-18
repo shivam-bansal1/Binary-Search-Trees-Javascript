@@ -19,11 +19,11 @@ class Tree {
   }
 
   buildTree(array) {
-    // Sort array
-    array.sort();
-    // Remove duplicates
-    array = [...new Set(array)];
-    return this.rootNode(array, 0, array.length - 1);
+    let copiedArray = [...array];
+    // arrow function required so that it does not sort lexographically
+    copiedArray.sort((a, b) => a - b);
+    copiedArray = [...new Set(copiedArray)];
+    return this.rootNode(copiedArray, 0, copiedArray.length - 1);
   }
 
   insert(value) {
@@ -203,6 +203,62 @@ class Tree {
     if (node.right) this.postOrder(callback, node.right);
     callback(node.data);
   }
+
+  height(node = this.root) {
+    if (!node) return -1;
+
+    let lHeight = this.height(node.left);
+    let rHeight = this.height(node.right);
+
+    return 1 + Math.max(lHeight, rHeight);
+  }
+
+  depth(node, currentNode = this.root) {
+    if (!node || !currentNode) return -1;
+    if (currentNode === node) return 0;
+
+    if (node.data > currentNode.data) {
+      let rightDepth = this.depth(node, currentNode.right);
+      return rightDepth === -1 ? -1 : 1 + rightDepth;
+    } else {
+      let leftDepth = this.depth(node, currentNode.left);
+      return leftDepth === -1 ? -1 : 1 + leftDepth;
+    }
+  }
+
+  isBalanced(node = this.root) {
+    if (!this.root) {
+      console.log("Tree is empty!");
+      return;
+    }
+    if (!node) {
+      return true;
+    }
+
+    let leftSubtreeHeight = this.height(node.left);
+    let rightSubtreeHeight = this.height(node.right);
+    let heightDifference = Math.abs(leftSubtreeHeight - rightSubtreeHeight);
+
+    return (
+      heightDifference <= 1 &&
+      this.isBalanced(node.left) &&
+      this.isBalanced(node.right)
+    );
+  }
+
+  rebalance() {
+    if (!this.root) {
+      console.log("Tree is empty !");
+      return;
+    }
+
+    let newSortedArray = [];
+    this.inOrder((value) => {
+      newSortedArray.push(value);
+    });
+    console.log("Calling buildTree function now");
+    this.root = this.buildTree(newSortedArray);
+  }
 }
 
 let newTree = new Tree([]);
@@ -221,5 +277,6 @@ prettyPrint(newTree.root);
 function callback(value) {
   process.stdout.write(`${value} -> `);
 }
-// newTree.levelOrderRecursive(callback);
-newTree.inOrder(callback);
+
+newTree.rebalance();
+prettyPrint(newTree.root);
