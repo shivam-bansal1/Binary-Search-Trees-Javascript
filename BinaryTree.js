@@ -1,7 +1,6 @@
-import { prettyPrint } from "./helper.js";
 import { Node } from "./Node.js";
 
-class Tree {
+export class Tree {
   constructor(arr) {
     this.root = this.buildTree(arr);
   }
@@ -260,23 +259,3 @@ class Tree {
     this.root = this.buildTree(newSortedArray);
   }
 }
-
-let newTree = new Tree([]);
-newTree.insert(45);
-newTree.insert(15);
-newTree.insert(79);
-newTree.insert(90);
-newTree.insert(10);
-newTree.insert(55);
-newTree.insert(20);
-newTree.insert(50);
-newTree.insert(100);
-newTree.insert(2);
-prettyPrint(newTree.root);
-
-function callback(value) {
-  process.stdout.write(`${value} -> `);
-}
-
-newTree.rebalance();
-prettyPrint(newTree.root);
